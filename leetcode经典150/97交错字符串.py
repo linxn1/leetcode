@@ -34,3 +34,35 @@ class Solution:
 solution = Solution()
 print(solution.isInterleave("aabc", "dbbca", "aadbbcbcac"))  # 输出: True
 print(solution.isInterleave("aabcc", "dbbca", "aadbbbaccc"))  # 输出: False
+
+
+class Solution:
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        if len(s1) + len(s2) != len(s3):
+            return False
+
+        # 初始化动态规划数组
+        m, n = len(s1), len(s2)
+        dp = [[False] * (n + 1) for _ in range(m + 1)]
+        dp[0][0] = True
+
+        for dm in range(1, m + 1):
+            if s1[:dm] == s3[:dm]:
+                dp[dm][0] = True
+        for dn in range(1, n + 1):
+            if s2[:dn] == s3[:dn]:
+                dp[0][dn] = True
+
+        for dm in range(1, m + 1):
+            for dn in range(1, n + 1):
+                if (s1[dm - 1] == s3[dm + dn - 1] and dp[dm - 1][dn]) or (
+                        s2[dn - 1] == s3[dm + dn - 1] and dp[dm][dn - 1]):
+                    dp[dm][dn] = True
+
+        # print(dp)
+        return dp[m][n]
+
+
+solution = Solution()
+print(solution.isInterleave("aac", "bc", "aabcc"))  # 输出: True
+print(solution.isInterleave("aabcc", "dbbca", "aadbbbaccc"))  # 输出: False

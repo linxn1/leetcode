@@ -55,3 +55,55 @@ grid2 = [
 
 print(Solution().numIslands(grid1))  # 输出：1
 print(Solution().numIslands(grid2))  # 输出：3
+
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid:
+            return 0
+        rols, cols = len(grid), len(grid[0])
+        num_islands = 0
+
+        # 定义四个方向
+        directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+
+        def bfs(r, c):
+            queue = deque()
+            queue.append((r, c))
+            # 标记为水域
+            grid[r][c] = '0'
+
+            while queue:
+                rb, cb = queue.popleft()
+                for xb, yb in directions:
+                    x, y = rb + xb, cb + yb
+                    if 0 <= x < rols and 0 <= y < cols and grid[x][y] == '1':
+                        grid[x][y] = '0'
+                        queue.append((x, y))
+
+        for r in range(rols):
+            for c in range(cols):
+                if grid[r][c] == '1':
+                    num_islands += 1
+                    bfs(r, c)
+        print(grid)
+        return num_islands
+
+
+# 示例测试
+grid1 = [
+    ["1", "1", "1", "1", "0"],
+    ["1", "1", "0", "1", "0"],
+    ["1", "1", "0", "0", "0"],
+    ["0", "0", "0", "0", "0"]
+]
+
+grid2 = [
+    ["1", "1", "0", "0", "0"],
+    ["1", "1", "0", "0", "0"],
+    ["0", "1", "0", "0", "0"],
+    ["0", "0", "0", "1", "1"]
+]
+
+print(Solution().numIslands(grid1))
+print(Solution().numIslands(grid2))
